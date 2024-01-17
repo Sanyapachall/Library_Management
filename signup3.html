@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="flex flex-col items-center justify-center  bg-black">
+      <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Sign Up</h2>
+        <form class="flex flex-col" id="signupForm">
+          <input
+            placeholder="First Name"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="text"
+            id="firstName"
+            required
+          />
+          <input
+            placeholder="Last Name"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="text"
+            id="lastName"
+            required
+          />
+          <input
+            placeholder="Email"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="email"
+            id="email"
+            required
+          />
+          <input
+            placeholder="Confirm Email"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="email"
+            id="confirmEmail"
+            required
+          />
+          <input
+            placeholder="Password"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="password"
+            id="password"
+            required
+          />
+          <input
+            placeholder="Confirm Password"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="password"
+            id="confirmPassword"
+            required
+          />
+          <label class="text-sm mb-2 text-gray-900 cursor-pointer" for="gender">
+            Gender
+          </label>
+          <select
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            id="gender"
+            required
+          >
+            <option value="" disabled selected>Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <label class="text-sm mb-2 text-gray-900 cursor-pointer" for="age">
+            Age
+          </label>
+          <input
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2"
+            id="age"
+            type="date"
+            required
+          />
+          <p id="errorMessage" class="text-red-500 mt-2"></p>
+          <p class="text-gray-900 mt-4">
+            Already have an account?
+            <a
+              class="text-sm text-blue-500 -200 hover:underline mt-4"
+              href="login2.html"
+              >Login</a
+            >
+          </p>
+          <button
+            class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
+            type="button"
+            onclick="validateForm()"
+          >
+            Sign Up
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function validateForm() {
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const confirmEmail = document
+          .getElementById("confirmEmail")
+          .value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document
+          .getElementById("confirmPassword")
+          .value.trim();
+        const gender = document.getElementById("gender").value.trim();
+        const age = document.getElementById("age").value.trim();
+        const errorMessage = document.getElementById("errorMessage");
+
+        errorMessage.textContent = ""; // Clear previous error messages
+
+        if (
+          !firstName ||
+          !lastName ||
+          !email ||
+          !confirmEmail ||
+          !password ||
+          !confirmPassword ||
+          !gender ||
+          !age
+        ) {
+          errorMessage.textContent = "All fields are required.";
+          return;
+        }
+
+        if (email !== confirmEmail) {
+          errorMessage.textContent = "Emails do not match.";
+          return;
+        }
+
+        if (password.length < 6) {
+          errorMessage.textContent =
+            "Password must be at least 6 characters long.";
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          errorMessage.textContent = "Passwords do not match.";
+          return;
+        }
+
+        // Retrieve existing values from local storage
+        const existingUser = JSON.parse(localStorage.getItem("users")) || [];
+        const user = {
+            firstName,
+            lastName,
+            email,
+            password,
+            gender,
+            age,
+        }
+        const user_data= [...existingUser,user]
+        console.log(user_data)
+       localStorage.setItem("users",JSON.stringify(user_data))
+       
+       localStorage.setItem("logedInUsers",JSON.stringify(user))
+
+      
+
+        // Clear input fields after storing data
+        document.getElementById("firstName").value = "";
+        document.getElementById("lastName").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("confirmEmail").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("confirmPassword").value = "";
+        document.getElementById("gender").value = "";
+        document.getElementById("age").value = "";
+
+        // Notify user or perform other actions
+        errorMessage.textContent = "Form submitted successfully!";
+        window.location.href="/mybookstore.html"
+      }
+
+    </script>
+  </body>
+</html>
+

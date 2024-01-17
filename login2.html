@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="flex flex-col items-center justify-center h-screen bg-black">
+      <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Login</h2>
+        <form class="flex flex-col" id="loginForm">
+          <input
+            placeholder="Email"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="email"
+            id="loginEmail"
+            required
+          />
+          <input
+            placeholder="Password"
+            class="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+            type="password"
+            id="loginPassword"
+            required
+          />
+          <p id="loginErrorMessage" class="text-red-500 mt-2"></p>
+          <p class="text-gray-900 mt-4">
+            Don't have an account?
+            <a
+              class="text-sm text-blue-500 -200 hover:underline mt-4"
+              href="signup3.html"
+              >Sign Up</a
+            >
+          </p>
+          <button
+            class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
+            type="button"
+            onclick="validateLogin()"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const logedInUsers = localStorage.getItem("logedInUsers")
+      if(logedInUsers){
+        window.location.href="/mybookstore.html"
+      }
+      function validateLogin() {
+        const loginEmail = document.getElementById("loginEmail").value.trim();
+        const loginPassword = document.getElementById("loginPassword").value.trim();
+        const loginErrorMessage = document.getElementById("loginErrorMessage");
+
+        loginErrorMessage.textContent = ""; // Clear previous error messages
+
+        // Retrieve stored user data from local storage
+        const storedUser = JSON.parse(localStorage.getItem("users")) || [];
+      
+        console.log(storedUser)
+       const logedInUsers = storedUser.find(user => {
+        return user.email === loginEmail && user.password === loginPassword
+       })
+       console.log(logedInUsers)
+        // Check if the entered credentials match the stored user data
+        if (logedInUsers) {
+          // Redirect to a success page or perform other actions
+          loginErrorMessage.textContent = "Login successful!";
+          localStorage.setItem("logedInUsers",JSON.stringify(logedInUsers))
+          window.location.href="/mybookstore.html"
+          // You can add a redirect or other actions here
+        } else {
+          loginErrorMessage.textContent = "Invalid email or password.";
+        }
+        
+      }
+    </script>
+  </body>
+</html>
